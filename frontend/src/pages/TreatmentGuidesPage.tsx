@@ -2,17 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, BookOpen, CheckCircle2, MessageSquare, Search, ShieldCheck, Youtube } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { api } from '../services/api';
-
-interface TreatmentGuide {
-  crop: string;
-  disease: string;
-  symptoms: string[];
-  immediateAction: string;
-  treatment: string;
-  prevention: string;
-  youtubeLink: string;
-}
+import { api, TreatmentGuide } from '../services/api';
 
 const TreatmentGuidesPage = () => {
   const [guides, setGuides] = useState<TreatmentGuide[]>([]);
@@ -28,7 +18,7 @@ const TreatmentGuidesPage = () => {
     const fetchGuides = async () => {
       try {
         setLoading(true);
-        const data = await api.getGuides(); // We'll add this method below
+        const data = await api.getGuides();
         setGuides(data);
 
         // Set first guide as default once loaded

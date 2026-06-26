@@ -1,18 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Send, Bot, User, Loader2, Sparkles, Youtube, ExternalLink } from 'lucide-react'
-import { api } from '../services/api'
+import { api, ChatMessage } from '../services/api'
 import { motion } from 'framer-motion'
-
-interface Message {
-  role: 'user' | 'bot'
-  content: string
-}
 
 const ChatPage = () => {
   const location = useLocation()
   const [input, setInput] = useState('')
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     { 
       role: 'bot', 
       content: "Hello! I am **PlantGuard AI**. I can help you identify symptoms, treatments, and prevention strategies for 38 different plant conditions. How can I help you today?" 

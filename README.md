@@ -15,7 +15,7 @@ A complete full-stack application for detecting plant diseases using EfficientNe
 ## Prerequisites
 - Python 3.8+
 - Node.js 16+
-- `trained_plant_disease_detection.keras` model file (placed in the root directory)
+- `efficientnet_b4.keras` model file placed in `backend/trained_model/`
 
 ## Setup & Run
 
@@ -49,6 +49,5 @@ The frontend will run on `http://localhost:3000`.
 - Tomato: Bacterial Spot, Early Blight, Healthy, Late Blight, Septoria Leaf Spot, Yellow Leaf Curl Virus
 
 ## Project Structure
-- `/backend`: FastAPI source code and knowledge base.
+- `/backend`: FastAPI source code organized into controllers, services, models, AI helpers, storage, and knowledge base files.
 - `/frontend`: React application source code.
-

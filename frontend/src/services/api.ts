@@ -2,6 +2,11 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8000';
 
+export interface ChatMessage {
+  role: 'user' | 'bot';
+  content: string;
+}
+
 export interface TreatmentGuide {
   crop: string;
   disease: string;
@@ -29,29 +34,36 @@ export interface ChatResponse {
   matched_class: string | null;
 }
 
-export const api = {
-  predict: async (file: File): Promise<PredictionResult> => {
+class PlantGuardApiClient {
+  private baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  async predict(file: File): Promise<PredictionResult> {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await axios.post(`${API_BASE_URL}/predict`, formData, {
+    const response = await axios.post(`${this.baseUrl}/predict`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
     return response.data;
-  },
+  }
 
-  chat: async (message: string, history: any[] = []): Promise<ChatResponse> => {
-    const response = await axios.post(`${API_BASE_URL}/chat`, {
+  async chat(message: string, history: ChatMessage[] = []): Promise<ChatResponse> {
+    const response = await axios.post(`${this.baseUrl}/chat`, {
       message,
       history,
     });
     return response.data;
-  },
+  }
 
-  // New method to fetch guides
-  getGuides: async (): Promise<TreatmentGuide[]> => {
-    const response = await axios.get(`${API_BASE_URL}/guides`);
+  async getGuides(): Promise<TreatmentGuide[]> {
+    const response = await axios.get(`${this.baseUrl}/guides`);
     return response.data;
-  },
-};
+  }
+}
+
+export const api = new PlantGuardApiClient(API_BASE_URL);
