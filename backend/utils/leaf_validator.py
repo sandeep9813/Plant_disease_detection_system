@@ -6,12 +6,12 @@ from scipy import ndimage  # Add this dependency if not already installed
 class LeafImageValidator:
     def __init__(
         self,
-        min_green_ratio: float = 0.18,           # Stricter
-        min_plant_ratio: float = 0.28,           # Stricter
-        max_skin_ratio_without_leaf: float = 0.15,
-        min_largest_leaf_ratio: float = 0.15,    # New: requires one dominant leaf
-        min_edge_ratio: float = 0.022,
-        min_saturation_mean: float = 0.16,
+        min_green_ratio: float = 0.10,
+        min_plant_ratio: float = 0.18,
+        max_skin_ratio_without_leaf: float = 0.20,
+        min_largest_leaf_ratio: float = 0.08,
+        min_edge_ratio: float = 0.015,
+        min_saturation_mean: float = 0.10,
     ):
         self.min_green_ratio = min_green_ratio
         self.min_plant_ratio = min_plant_ratio
@@ -36,14 +36,15 @@ class LeafImageValidator:
             or stats["saturation_mean"] < self.min_saturation_mean
         )
 
-        # Main rejection logic - now much stricter
-        if (
-            is_skin_dominated 
-            or is_low_detail 
-            or not has_green_leaf_signal 
-            or not has_plant_color_signal
-            or not has_single_dominant_leaf
-        ):
+        passed_checks = sum([
+            has_green_leaf_signal,
+            has_plant_color_signal,
+            has_single_dominant_leaf,
+            not is_skin_dominated,
+            not is_low_detail,
+        ])
+
+        if passed_checks < 3:
             raise HTTPException(
                 status_code=422,
                 detail=(
